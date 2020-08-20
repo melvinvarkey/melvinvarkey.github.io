@@ -1,0 +1,908 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Make your Operating System (64-bit)</title><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+.select-value-color-default { background-color: rgba(206,205,202,0.5); }
+.select-value-color-gray { background-color: rgba(155,154,151, 0.4); }
+.select-value-color-brown { background-color: rgba(140,46,0,0.2); }
+.select-value-color-orange { background-color: rgba(245,93,0,0.2); }
+.select-value-color-yellow { background-color: rgba(233,168,0,0.2); }
+.select-value-color-green { background-color: rgba(0,135,107,0.2); }
+.select-value-color-blue { background-color: rgba(0,120,223,0.2); }
+.select-value-color-purple { background-color: rgba(103,36,222,0.2); }
+.select-value-color-pink { background-color: rgba(221,0,129,0.2); }
+.select-value-color-red { background-color: rgba(255,0,26,0.2); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="c850ef5b-9a7e-4e20-9379-7f4463ed8fb5" class="page sans"><header><img class="page-cover-image" src="https://www.notion.so/images/page-cover/nasa_ibm_type_704.jpg" style="object-position:center 11.050000000000004%"/><div class="page-header-icon page-header-icon-with-cover"><span class="icon">💻</span></div><h1 class="page-title">Make your Operating System (64-bit)</h1></header><div class="page-body"><nav id="48c5f7a9-0674-471d-9c0b-9c6bce8bfe5f" class="block-color-gray table_of_contents"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#93cc06d1-2e07-4204-9d1f-b694992781b6">What is User space and Kernel space?</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#8bf158ce-b7dd-4335-9f5c-c623e0134ff4">Pre-requisites</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#fa360e1b-5538-4ffd-bc03-9472d6197a94">Installation of Windows Subsystem for Linux </a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#412247e4-934b-4c1d-b3d6-9c51279850f5">Download and Extract the Source code of GCC Cross-compiler and Binutils</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#c4a09bb0-e8b4-4494-aee3-7cad725a7ba1">Build and Install the Binutils</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#9dc75d4c-4076-413f-94ee-c8f9947c2f95">Build and Install the GCC Cross-Compiler </a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#2494ad84-d991-47d9-a3a3-81affb2a4f8f">Essentials files for creating 64-Bit Operating System</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#c8aabd52-1dd2-4103-837e-f089afdd5927">boot.s</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#b253b464-5956-4e60-9914-dbd4bb8491fa">kernel.c</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#68817437-30fa-4461-85ed-12087f886200">linker.ld</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#bf87d5d5-c9f6-4642-ac3c-399bd9d7546c">Building a Bootable ISO Image</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#b5c4feff-8361-43de-b500-ea9bfa517d35">Testing the new Operating System</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#5b1a6f72-e5db-4743-a811-9ef842696fb1">Make File creation</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#3e2989e9-17e9-4629-bdd8-e3becb144c23">Final Outputs</a></div></nav><p id="269fd2b7-fc1c-49e0-a13b-6cdddc6dbad3" class="">Before diving deep into building our own <strong>operating system</strong>, we need to understand a few basic technology and terminologies related to this topic. </p><p id="5819929f-d8db-49a9-85db-d44fed73d2aa" class="">Let&#x27;s talk about some of the basics of Operating system. An Operating system, is a piece of software that controls the hardware components of the system be it a phone, laptop, or desktop. It is in charge of the communication between the software and the hardware. </p><p id="62de3232-9ea6-403d-8bf3-b6c816378dbd" class="">A typical operating system consists of the following components they are: </p><ol id="4801b252-c932-403e-aaf2-b1aec097f41f" class="numbered-list" start="1"><li>The Bootloader - controls the boot process</li></ol><ol id="a0458e1b-a7b5-4fee-8a84-2608c3a7fa75" class="numbered-list" start="2"><li>The Kernel - the core of the system and manages the CPU, memory and peripheral devices</li></ol><ol id="0282c436-e912-4f95-b8e5-59668041fa10" class="numbered-list" start="3"><li>Daemons - background services</li></ol><ol id="d0dc85a5-492e-421f-8cd1-7fd0accfe589" class="numbered-list" start="4"><li>Networking - communication systems for sending and receiving data between systems </li></ol><ol id="cf0e7850-e077-4917-9cf2-4c7b32bdfc1e" class="numbered-list" start="5"><li>The Shell - software that allows manipulation of the device through commands</li></ol><ol id="aca942d0-b8ff-45e6-b97c-46e257bef64d" class="numbered-list" start="6"><li>Graphical Server - the system that shows graphics on the screen</li></ol><ol id="32c9fd12-3bbd-4e52-9ee0-a74450947c73" class="numbered-list" start="7"><li>Desktop Environment - software or system used for user interaction</li></ol><ol id="ef4b5c4c-ffb1-47e0-a27c-f4b7dd54412e" class="numbered-list" start="8"><li>Applications - programs that perform user&#x27;s tasks such as word processors, paint, etc</li></ol><h3 id="93cc06d1-2e07-4204-9d1f-b694992781b6" class="">What is User space and Kernel space?</h3><figure id="298a5fe3-0be0-40cb-b44b-778bcbf46490" class="image"><a href="Make%20your%20Operating%20System%20(64-bit)%20298a5fe30be040cbb44b778bcbf46490/Untitled.png"><img style="width:1450px" src="Make%20your%20Operating%20System%20(64-bit)%20298a5fe30be040cbb44b778bcbf46490/Untitled.png"/></a><figcaption><a href="https://twitter.com/b0rk/status/804200666226900992">https://twitter.com/b0rk/status/804200666226900992</a></figcaption></figure><p id="9447c567-6ef2-4e42-a227-2d7096e93c7d" class=""><strong>User Space </strong>- the user’s applications are carried out in the user-space, where they can reach a subset of the machine’s available resources via kernel system calls. By using the core services provided the kernel, a user-level application can be created like a game or office productivity software for example.</p><p id="403737f1-b1ab-48f1-bdcc-3129a303e689" class=""><strong>Kernel Space</strong> - the kernel is found in an elevated system state, which includes a protected memory space and full access to the device’s hardware. This system state and memory space is altogether referred to as kernel-space. Within kernel space the core access to the hardware and system services are managed and provided as a service to the rest of the system.</p><p id="b7d7fac2-eb2e-4702-95d5-27fadc283231" class=""><a href="https://linuxhint.com/linux-kernel-tutorial-beginners/">https://linuxhint.com/linux-kernel-tutorial-beginners/</a></p><h3 id="8bf158ce-b7dd-4335-9f5c-c623e0134ff4" class="">Pre-requisites</h3><ul id="89007e38-a14c-4b3f-b562-ae6b87c2a745" class="bulleted-list"><li>GNU / Linux / Windows Subsystem for Linux (preferred) </li></ul><ul id="abe36692-7e2f-4194-ab00-1d8ec3d2ef80" class="bulleted-list"><li>Assembler</li></ul><ul id="f5a932a4-4c6c-4fdf-ac15-c578a609be5e" class="bulleted-list"><li>GCC - GNU Compiler Collection</li></ul><ul id="b469fa2a-72a8-443f-8d69-bf8e4041b4c0" class="bulleted-list"><li>Xorriso - A package that creates, loads, manipulates ISO 9660 filesystem images. (man xorriso)</li></ul><ul id="c596af4b-bb5c-4dbd-acaa-d3035146357d" class="bulleted-list"><li>grub-mkrescue - Make a GRUB rescue image, this package internally calls the Xorisso functionality to build an ISO image</li></ul><ul id="5673a1a6-a0b0-403d-a3b6-43796d8e9e21" class="bulleted-list"><li>QEMU - Quick EMUlator to boot our kernel in virtual machine without rebooting the host</li></ul><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="d4ed2eed-c682-4877-a8c7-f8ad06200713"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">To install Xorriso → sudo apt-get install xorriso
+To install grub-mkrescue → sudo apt-get install grub-common</div></figure><h3 id="fa360e1b-5538-4ffd-bc03-9472d6197a94" class="">Installation of Windows Subsystem for Linux </h3><ul id="8620c968-143a-49c0-a88d-cb34ddb6788f" class="bulleted-list"><li>Turn on the windows feature<figure id="999ae78b-0a33-4fa7-ab37-85a7a8545474" class="image"><a href="Make%20your%20Operating%20System%20(64-bit)%20298a5fe30be040cbb44b778bcbf46490/Untitled%201.png"><img style="width:421px" src="Make%20your%20Operating%20System%20(64-bit)%20298a5fe30be040cbb44b778bcbf46490/Untitled%201.png"/></a></figure></li></ul><ul id="e312b48d-35ca-43a7-8404-062a19be22f5" class="bulleted-list"><li>Download Ubuntu from the Microsoft Store<figure id="62094db4-a6b2-4e0f-babf-0480884ccaac" class="image"><a href="Make%20your%20Operating%20System%20(64-bit)%20298a5fe30be040cbb44b778bcbf46490/Untitled%202.png"><img style="width:981px" src="Make%20your%20Operating%20System%20(64-bit)%20298a5fe30be040cbb44b778bcbf46490/Untitled%202.png"/></a></figure></li></ul><h3 id="412247e4-934b-4c1d-b3d6-9c51279850f5" class="">Download and Extract the Source code of GCC Cross-compiler and Binutils</h3><ul id="27d6a60d-8ab2-44ca-ad6d-eef7f3b8171f" class="bulleted-list"><li><strong>GCC Cross-compiler</strong> can be defined as a compiler which can convert instructions into machine code or low level code for a computer other than that on which it is run.</li></ul><ul id="971b82b7-606f-4ce9-aef1-593fe7b474b3" class="bulleted-list"><li><strong>Binutils </strong>are collections of binary tools. <p id="e7f31206-5440-4977-ad95-704663eb04f0" class="">The GNU Binary Utilities, or binutils, are a set of programming tools for creating and managing binary programs, object files, libraries, profile data, and assembly source code. The main ones are:
+ld - the GNU linker
+as - the GNU assembler</p><p id="d63daad3-f8a7-4983-b7b4-c63f52737a9f" class="block-color-gray">For more information read here:</p><p id="f7c2cf0e-815e-4cdd-bd8b-226d49934f5d" class="block-color-gray"><a href="https://en.wikipedia.org/wiki/GNU_Binutils">https://en.wikipedia.org/wiki/GNU_Binutils</a></p><p id="fecbf513-e951-4a76-a0bd-094c827a9da6" class="block-color-gray"><a href="https://www.gnu.org/software/binutils/">https://www.gnu.org/software/binutils/</a></p><p id="b9a78d73-ecc4-4318-a77a-520cf3189e36" class="block-color-gray"><a href="https://opensource.com/article/19/10/gnu-binutils">https://opensource.com/article/19/10/gnu-binutils</a></p></li></ul><pre id="ecce41ec-8969-4135-b291-62af2ad426bc" class="code"><code><strong>Download Binutils
+$ </strong>wget <a href="http://ftp.gnu.org/gnu/binutils/binutils-2.35.tar.gz">http://ftp.gnu.org/gnu/binutils/binutils-2.35.tar.gz</a>
+
+<strong>Download GCC compiler
+$ </strong>wget xvf gcc-10.2.0 <a href="http://ftp.gnu.org/gnu/gcc/gcc-10.2.0/gcc-10.2.0.tar.gz">http://ftp.gnu.org/gnu/gcc/gcc-10.2.0/gcc-10.2.0.tar.gz</a></code></pre><figure id="a8e80577-3255-4b68-b086-f5c9910c360b" class="image"><a href="Make%20your%20Operating%20System%20(64-bit)%20298a5fe30be040cbb44b778bcbf46490/1a.png"><img style="width:624px" src="Make%20your%20Operating%20System%20(64-bit)%20298a5fe30be040cbb44b778bcbf46490/1a.png"/></a></figure><figure id="e7138b3a-5704-41c1-84d9-ffbb82096511" class="image"><a href="Make%20your%20Operating%20System%20(64-bit)%20298a5fe30be040cbb44b778bcbf46490/2a.png"><img style="width:624px" src="Make%20your%20Operating%20System%20(64-bit)%20298a5fe30be040cbb44b778bcbf46490/2a.png"/></a></figure><p id="7f0baa2e-0eec-470f-9706-41d31e2ac4ce" class="">Extract downloaded files to a folder using the following commands</p><pre id="f8f7f4d8-05ee-4a1d-b39f-cd65a55eb068" class="code"><code>$ tar xvf binutils-2.35.tar.gz
+$ tar xvf gcc-10.2.0.tar.gz</code></pre><figure id="9eb4c2ed-a738-46e1-9c95-c4624a2603e9" class="image"><a href="Make%20your%20Operating%20System%20(64-bit)%20298a5fe30be040cbb44b778bcbf46490/1.png"><img style="width:1366px" src="Make%20your%20Operating%20System%20(64-bit)%20298a5fe30be040cbb44b778bcbf46490/1.png"/></a></figure><figure id="1f8c142a-509f-4c7c-887c-5902043317b5" class="image"><a href="Make%20your%20Operating%20System%20(64-bit)%20298a5fe30be040cbb44b778bcbf46490/2.png"><img style="width:1366px" src="Make%20your%20Operating%20System%20(64-bit)%20298a5fe30be040cbb44b778bcbf46490/2.png"/></a></figure><p id="3c14301a-607b-4880-a326-5ec6c7cd5b28" class="">
+</p><p id="a448a73f-2c33-4b40-bd30-28869234876f" class="">Install some essential packages before we start the build process.</p><pre id="dbca4572-66d4-420f-a478-3d990c53c129" class="code"><code>$ sudo apt-get install libmpc-dev
+$ sudo apt-get install -y libcloog-isl-dev
+$ sudo apt-get install libisl-dev
+$ sudo apt-get install libmpfr-dev
+$ sudo apt-get install libgmp3-dev</code></pre><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="4c489d70-19db-4cb5-ab2e-51f0016d0b8c"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><strong>libmpc-dev - </strong>multiple precision complex floating-point library development package
+MPC is a portable library written in C for arbitrary precision arithmetic on complex numbers providing correct rounding. 
+https://packages.debian.org/sid/libmpc-dev
+
+<strong>libcloog-isl-dev - </strong>Chunky Loop Generator (development files)
+CLooG is a software that generates loops for scanning Z-polyhedra. CLooG is designed to avoid control overhead and to produce a very efficient code.
+https://packages.debian.org/jessie/libcloog-isl-dev
+
+<strong>libisl-dev</strong> - manipulating sets and relations of integer points bounded by linear constraints
+isl is a library for manipulating sets and relations of integer points bounded by linear constraints.
+https://packages.debian.org/sid/libisl-dev
+
+<strong>libmpfr-dev - </strong>multiple precision floating-point computation developers tools
+This development package provides the header files and the symbolic links to allow compilation and linking of programs that use the libraries provided in the libmpfr4 package.
+https://packages.debian.org/sid/libmpfr-dev</div></figure><p id="857a3901-f759-4b9d-b2e2-28ba6e1e9c28" class="">
+</p><p id="3a1050c5-5601-4b00-a028-46d136f1eb6a" class="">To install the new compilers in a <strong>HOME </strong>folder. Set the PATH variable as shown below (optional) </p><pre id="40906f4e-98e5-4a53-8e26-707542fd5819" class="code"><code>$ export PREFIX=&quot;$home/opt/cross&quot;
+$ export TARGET=i686-elf
+$ export PATH =&quot;$PREFIX/bin:$PATH&quot;</code></pre><h3 id="c4a09bb0-e8b4-4494-aee3-7cad725a7ba1" class="">Build and Install the Binutils</h3><p id="82c5ef10-4f38-480d-8fc1-b8f3a3fa1b18" class="">Install the new compiler in a <strong>HOME </strong>folder. This step builds and installs the cross-assembler, cross-linker, and other tools.</p><pre id="df55ead4-9d79-4933-8857-13d24e3eacef" class="code"><code>$ rm -rfv binutils-build #remove binutils - build if it already exists
+$ mkdir binutils-build
+$ cd binutils-build
+$ ../binutils-2.35/configure --prefix=$home/opt/cross --target=i686-elf --disable-nls
+$ make -j8 # 8 is size of RAM or make all or make -j4
+$ sudo make install
+$ cd ..</code></pre><h3 id="9dc75d4c-4076-413f-94ee-c8f9947c2f95" class="">Build and Install the GCC Cross-Compiler </h3><p id="254a4e17-af6d-46f2-97a1-e03e8c0e0538" class="">The GCC Cross-compiler, which is a compiler that builds programs for another machine. All you need is a Unix-like environment with a recent version of GCC already installed.</p><figure id="ceb79f92-25b9-48f8-9aaf-4a4bcd64b3fc" class="image"><a href="Make%20your%20Operating%20System%20(64-bit)%20298a5fe30be040cbb44b778bcbf46490/Untitled%203.png"><img style="width:576px" src="Make%20your%20Operating%20System%20(64-bit)%20298a5fe30be040cbb44b778bcbf46490/Untitled%203.png"/></a><figcaption><a href="https://preshing.com/20141119/how-to-build-a-gcc-cross-compiler/">https://preshing.com/20141119/how-to-build-a-gcc-cross-compiler/</a></figcaption></figure><p id="666a340e-b717-4108-a416-c3f730a464aa" class="">This step will build GCC’s C and C++ cross-compilers only, and install them to /opt/cross/bin. It won’t invoke those compilers to build any libraries just yet.</p><pre id="70567a09-0a72-42a0-91b9-362f85fa6fb5" class="code"><code>$ rm -rfv gcc-build
+$ mkdir gcc-build
+$ cd gcc-build
+$ ../gcc-10.2.0/configure --prefix=$home/opt/cross --target=i686-elf --enable-languages=c,c++ --disable-nls --without-headers
+$ make -j8 all-gcc #almost a day to complete if -j8 not used or use make all-gcc
+$ make -j8 all-target-libgcc / make -j8 all-libgcc
+$ sudo make install-gcc
+$ sudo make install-target-libgcc</code></pre><p id="3b787beb-d8b1-44a9-8c05-8f653f1e50e7" class="block-color-gray">For more information read here: </p><p id="1ab8ad61-7ca1-499c-b6a8-73bfe013b214" class="block-color-gray"><a href="https://preshing.com/20141119/how-to-build-a-gcc-cross-compiler/">https://preshing.com/20141119/how-to-build-a-gcc-cross-compiler/</a></p><p id="329fcd4f-8a20-4111-81bc-cc6356a2b7b8" class="block-color-gray"><a href="https://www6.software.ibm.com/developerworks/education/l-cross/l-cross-ltr.pdf">https://www6.software.ibm.com/developerworks/education/l-cross/l-cross-ltr.pdf</a></p><p id="767a35db-cc78-41d0-aab4-92103a344d3c" class="block-color-gray"><a href="https://tssurya.wordpress.com/2014/08/28/explanation-of-boot-s/">https://tssurya.wordpress.com/2014/08/28/explanation-of-boot-s/</a></p><p id="9458bd37-a798-44b9-a772-3da2df4a9de3" class="block-color-gray"><a href="https://www.gnu.org/software/grub/manual/multiboot/multiboot.html">https://www.gnu.org/software/grub/manual/multiboot/multiboot.html</a></p><p id="18b25161-5d47-4f8b-ac1d-2361d1ba2954" class="block-color-gray"><a href="https://os.phil-opp.com/cross-compile-binutils/">https://os.phil-opp.com/cross-compile-binutils/</a></p><p id="ed8ad4e0-2a6e-497f-808f-62e9b5ffe3c2" class="block-color-gray"><a href="http://www.ifp.illinois.edu/~nakazato/tips/xgcc.html#binutil">http://www.ifp.illinois.edu/~nakazato/tips/xgcc.html#binutil</a></p><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="0ba57386-bcae-4631-b990-76e15ac9ce3f"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><strong>disable-nls
+</strong>The --enable-nls option enables Native Language Support (NLS), which lets GCC output diagnostics in languages other than American English. The --disable-nls option disables NLS which makes a smaller toolchain and all the error messages will be in English.
+<strong>without-headers</strong> 
+This option tells the compiler that there is no C standard library for the target system
+<strong>prefix 
+</strong>configure script where to install the cross compiler
+<strong>target </strong>
+Which platform the binaries are produced. In this case, its i686-elf</div></figure><h3 id="2494ad84-d991-47d9-a3a3-81affb2a4f8f" class="">Essentials files for creating 64-Bit Operating System</h3><blockquote id="89b1bdf9-8979-4f0d-a659-fdda91cac698" class=""><strong>boot.s </strong>- Kernel entry point that sets up the processor environment</blockquote><blockquote id="d6026dbd-8d77-4a8a-864e-dee542ade1e5" class=""><strong>kernel.c</strong> - Contains the actual kernel routines</blockquote><blockquote id="00010345-b1ee-45cb-a7c5-95a9ce6e3752" class=""><strong>linker.ld</strong> - used for linking the above files</blockquote><p id="b0285e02-6c15-4377-9692-7fb5bb882c38" class="">Create a folder and add the following files: </p><h3 id="c8aabd52-1dd2-4103-837e-f089afdd5927" class="">boot.s</h3><pre id="4bd02e69-5ae1-4f59-8c01-6a93e8fcd8f0" class="code"><code># Declare constants used for creating a multiboot header.
+.set ALIGN,    1&lt;&lt;0             # align loaded modules on page boundaries
+.set MEMINFO,  1&lt;&lt;1             # provide memory map
+.set FLAGS,    ALIGN | MEMINFO  # this is the Multiboot &#x27;flag&#x27; field
+.set MAGIC,    0x1BADB002       # &#x27;magic number&#x27; lets bootloader find the header
+.set CHECKSUM, -(MAGIC + FLAGS) # checksum of above, to prove we are multiboot
+
+#These lines describe the constants recognized by a multiboot compatible loader.
+
+# Declare a header as in the Multiboot Standard.
+.section .multiboot
+.align 4
+.long MAGIC 
+.long FLAGS 
+.long CHECKSUM
+
+# Allocate room for a small temporary stack as a global variable called stack.
+.section .bootstrap_stack
+stack_bottom:
+.skip 16384 # 16 KiB
+stack_top:
+
+# The linker script specifies _start as the entry point to the kernel and the
+# bootloader will jump to this position once the kernel has been loaded.
+.section .text
+.global _start
+.type _start, @function
+
+_start:
+	movl $stack_top, %esp
+	call kernel_main
+	cli
+
+# Infinite loop 
+hang:
+	hlt
+	jmp hang</code></pre><p id="d319d991-18d2-4ee1-b354-f145214396ce" class="">Assemble the above <strong>boot.s</strong> file using the following command (optional, as a make file is created for assemble, linker and compilation) </p><pre id="d99421d7-d296-4a5c-b9d0-c937d2fe84dc" class="code"><code>$ ./i686-elf-as ~/OS/boot.s -o ~/OS/boot.o</code></pre><h3 id="b253b464-5956-4e60-9914-dbd4bb8491fa" class="">kernel.c</h3><pre id="5a80a929-dc1b-403c-8b61-2b1a73ca2e02" class="code"><code>#include &lt;stdbool.h&gt;
+#include &lt;stddef.h&gt;
+#include &lt;stdint.h&gt;
+
+static const uint8_t COLOR_BLACK = 0;
+static const uint8_t COLOR_BLUE = 1;
+static const uint8_t COLOR_GREEN = 2;
+static const uint8_t COLOR_CYAN = 3;
+static const uint8_t COLOR_RED = 4;
+static const uint8_t COLOR_MAGENTA = 5;
+static const uint8_t COLOR_BROWN = 6;
+static const uint8_t COLOR_LIGHT_GREY = 7;
+static const uint8_t COLOR_DARK_GREY = 8;
+static const uint8_t COLOR_LIGHT_BLUE = 9;
+static const uint8_t COLOR_LIGHT_GREEN = 10;
+static const uint8_t COLOR_LIGHT_CYAN = 11;
+static const uint8_t COLOR_LIGHT_RED = 12;
+static const uint8_t COLOR_LIGHT_MAGENTA = 13;
+static const uint8_t COLOR_LIGHT_BROWN = 14;
+static const uint8_t COLOR_WHITE = 15;
+
+uint8_t make_color(uint8_t fg, uint8_t bg)
+{
+	return fg | bg &lt;&lt; 4;
+}
+
+uint16_t make_vgaentry(char c, uint8_t color)
+{
+	uint16_t c16 = c;
+	uint16_t color16 = color;
+	return c16 | color16 &lt;&lt; 8;
+}
+
+size_t strlen(const char* str)
+{
+	size_t ret = 0;
+	while ( str[ret] != 0 )
+		ret++;
+	return ret;
+}
+
+static const size_t VGA_WIDTH = 80;
+static const size_t VGA_HEIGHT = 24;
+
+size_t terminal_row;
+size_t terminal_column;
+uint8_t terminal_color;
+uint16_t* terminal_buffer;
+
+void terminal_initialize()
+{
+	terminal_row = 0;
+	terminal_column = 0;
+	terminal_color = make_color(COLOR_LIGHT_GREY, COLOR_BLACK);
+	terminal_buffer = (uint16_t*) 0xB8000;
+	for ( size_t y = 0; y &lt; VGA_HEIGHT; y++ )
+		for ( size_t x = 0; x &lt; VGA_WIDTH; x++ )
+		{
+			const size_t index = y * VGA_WIDTH + x;
+			terminal_buffer[index] = make_vgaentry(&#x27; &#x27;, terminal_color);
+		}
+}
+
+void terminal_setcolor(uint8_t color)
+{
+	terminal_color = color;
+}
+
+void terminal_putentryat(char c, uint8_t color, size_t x, size_t y)
+{
+	const size_t index = y * VGA_WIDTH + x;
+	terminal_buffer[index] = make_vgaentry(c, color);
+}
+
+void terminal_putchar(char c)
+{
+	terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
+	if ( ++terminal_column == VGA_WIDTH )
+	{
+		terminal_column = 0;
+		if ( ++terminal_row == VGA_HEIGHT )
+		{
+			terminal_row = 0;
+		}
+	}
+}
+
+void terminal_writestring(const char* data)
+{
+	size_t datalen = strlen(data);
+	for ( size_t i = 0; i &lt; datalen; i++ )
+		terminal_putchar(data[i]);
+}
+
+void kernel_main()
+{
+	terminal_initialize();
+	terminal_writestring(&quot;Hello, kernel World!\n&quot;);
+}</code></pre><p id="23cd1048-59c9-47b9-ac4c-ae8251e0c189" class="">Compile this <strong>kernel.c</strong> file using the following command</p><pre id="0c0b2e7b-d034-42d4-bc08-603aa7d6f470" class="code"><code>$ ./i686-elf-gcc -c kernel.c -o kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra</code></pre><h3 id="68817437-30fa-4461-85ed-12087f886200" class="">linker.ld</h3><pre id="e0f90809-d9f1-42ee-ad63-7ddfe2004b98" class="code"><code>ENTRY(_start)
+
+SECTIONS
+{
+	/* Begin putting sections at 1 MiB, a conventional place for kernels to be
+	   loaded at by the bootloader. */
+	. = 1M;
+
+	/* First put the multiboot header, as it is required to be put very early
+	   early in the image or the bootloader won&#x27;t recognize the file format.
+	   Next we&#x27;ll put the .text section. */
+	.text BLOCK(4K) : ALIGN(4K)
+	{
+		*(.multiboot)
+		*(.text)
+	}
+
+	/* Read-only data. */
+	.rodata BLOCK(4K) : ALIGN(4K)
+	{
+		*(.rodata)
+	}
+
+	/* Read-write data (initialized) */
+	.data BLOCK(4K) : ALIGN(4K)
+	{
+		*(.data)
+	}
+
+	/* Read-write data (uninitialized) and stack */
+	.bss BLOCK(4K) : ALIGN(4K)
+	{
+		*(COMMON)
+		*(.bss)
+		*(.bootstrap_stack)
+	}
+}</code></pre><p id="f5932712-f92f-47b3-883a-7c22e6fff000" class="">Link the kernel and boot object files using the following command</p><pre id="1f533b75-0034-419b-be09-0998a2109ae3" class="code"><code>$ ./i686-elf-gcc -T linker.ld -o myos.bin -ffreestanding -O2 -nostdlib boot.o kernel.o -lgcc</code></pre><h3 id="bf87d5d5-c9f6-4642-ac3c-399bd9d7546c" class="">Building a Bootable ISO Image</h3><p id="6fca176a-6c9e-41e6-b741-cb152fec9f2e" class="">After the above steps are executed successfully without any error, we can now make a bootable ISO image that will run on virtual machines such as virtualbox, qemu, vmware etc.
+We have to create a bootable image containing the GRUB bootloader and our kernel using the program <strong>grub-mkrescue</strong>. You will need to install the GRUB utility programs and the program Xorriso (latest version) to create the ISO file. </p><p id="c2db1d75-ec9f-4629-bb03-3caee3595eff" class="">First, we need to create a file called <strong>grub.cfg: </strong></p><pre id="93bb0b23-d443-4ccd-9309-907c7146508c" class="code"><code>menuentry &quot;myos&quot; {
+multiboot /boot/myos.bin
+}</code></pre><p id="06f4931c-d293-4c41-98d7-7f5b7a8dab39" class="">The steps for making the ISO image is the following (optional, as make file is created): </p><pre id="c8017b50-5aea-4358-b30f-d40c3c971a19" class="code"><code>$ mkdir -p isodir
+$ mkdir -p isodir/boot
+$ cp myos.bin isodir/boot/myos.bin
+$ mkdir -p isodir/boot/grub
+$ cp grub.cfg isodir/boot/grub/grub.cfg
+$ grub-mkrescue -o myos.iso isodir</code></pre><h3 id="b5c4feff-8361-43de-b500-ea9bfa517d35" class="">Testing the new Operating System</h3><p id="cd1129c3-5ca9-4d24-863a-9da3a8648717" class="">Use Virtualbox or Qemu to run the image file.</p><pre id="525fea85-89f0-490c-8fdd-40a8e78e35ab" class="code"><code>$ qemu-system-i386 -cdrom myos.iso
+or
+&gt;qemu-system-i386.exe -cdrom &lt;path-to-ISO-file&gt;myos.iso</code></pre><h3 id="5b1a6f72-e5db-4743-a811-9ef842696fb1" class="">Make File creation</h3><p id="965733ad-c687-47be-ba39-e0c46aa34652" class="">To simplify the whole process of building the operating systems and execute each stage step by step, we have to create a Make file. Use the code below: </p><pre id="03ffbfe1-6440-4135-8e84-c1b9aac3f7a9" class="code"><code>AS:=/opt/cross/bin/i686-elf-as
+CC:=/opt/cross/bin/i686-elf-gcc
+
+CFLAGS:=-ffreestanding -O2 -Wall -Wextra -nostdlib -nostartfiles -nodefaultlibs
+CPPFLAGS:=
+LIBS:=-lgcc
+
+OBJS:=\
+boot.o \
+kernel.o \
+
+all: myos.bin
+
+.PHONEY: all clean iso run-qemu
+
+myos.bin: $(OBJS) linker.ld
+	$(CC) -T linker.ld -o $@ $(CFLAGS) $(OBJS) $(LIBS)
+
+%.o: %.c
+	$(CC) -c $&lt; -o $@ -std=gnu99 $(CFLAGS) $(CPPFLAGS)
+
+%.o: %.s
+	$(AS) $&lt; -o $@
+
+clean:
+	rm -rf isodir
+	rm -f myos.bin myos.iso $(OBJS)
+
+iso: myos.iso
+
+isodir isodir/boot isodir/boot/grub:
+	mkdir -p $@
+
+isodir/boot/myos.bin: myos.bin isodir/boot
+	cp $&lt; $@
+
+isodir/boot/grub/grub.cfg: grub.cfg isodir/boot/grub
+	cp $&lt; $@
+
+myos.iso: isodir/boot/myos.bin isodir/boot/grub/grub.cfg
+	grub-mkrescue -o $@ isodir
+
+run-qemu: myos.iso
+	qemu-system-i386 -cdrom myos.iso</code></pre><p id="ab0f6072-5109-4765-b9a0-10c09bd45a68" class="">Run the following commands to execute make </p><pre id="ce7aaa38-899e-4bfd-9617-70824716c1e5" class="code"><code>$ make all
+$ make iso</code></pre><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="e8303c91-0bb3-4e78-822a-59c5069929f3"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">Use <strong>$ python3 -m http.server 9999</strong> to transfer ISO image file from the Windows subsystem for Linux to the host machine to run Qemu or Virtualbox. </div></figure><h3 id="3e2989e9-17e9-4629-bdd8-e3becb144c23" class="">Final Outputs</h3><p id="ef51e0ee-4f51-4206-b32f-f04225b5de60" class="">After running the ISO image file we will get a grub menu to select the new operating system. This is a minimal OS and displays the message &quot;Hello, kernel World!&quot;</p><figure id="4c6f5276-d2c8-452a-81e3-d47c757eee50" class="image"><a href="Make%20your%20Operating%20System%20(64-bit)%20298a5fe30be040cbb44b778bcbf46490/Grub_Menu.png"><img style="width:725px" src="Make%20your%20Operating%20System%20(64-bit)%20298a5fe30be040cbb44b778bcbf46490/Grub_Menu.png"/></a><figcaption>Grub Menu to choose the new OS</figcaption></figure><figure id="6bb40858-171f-4718-be07-71a7f86c80c9" class="image"><a href="Make%20your%20Operating%20System%20(64-bit)%20298a5fe30be040cbb44b778bcbf46490/MyOS1.png"><img style="width:725px" src="Make%20your%20Operating%20System%20(64-bit)%20298a5fe30be040cbb44b778bcbf46490/MyOS1.png"/></a><figcaption>Booted to display a message on Kernel mode</figcaption></figure><figure id="80ea880c-3350-40cf-92e1-c02347a1aa61" class="image"><a href="Make%20your%20Operating%20System%20(64-bit)%20298a5fe30be040cbb44b778bcbf46490/MyOS2.png"><img style="width:730px" src="Make%20your%20Operating%20System%20(64-bit)%20298a5fe30be040cbb44b778bcbf46490/MyOS2.png"/></a><figcaption>Another Kernel.c file is compiled to create the following output</figcaption></figure><figure id="3ddde274-1d42-4226-be6d-4302224bfef3" class="image"><a href="Make%20your%20Operating%20System%20(64-bit)%20298a5fe30be040cbb44b778bcbf46490/Untitled%204.png"><img style="width:384px" src="Make%20your%20Operating%20System%20(64-bit)%20298a5fe30be040cbb44b778bcbf46490/Untitled%204.png"/></a></figure><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="6947d778-7ffe-4f2d-bca4-f7e9d13919b1"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><strong>References
+</strong><a href="https://www.codeproject.com/Articles/1225196/Create-Your-Own-Kernel-In-C-2">https://www.codeproject.com/Articles/1225196/Create-Your-Own-Kernel-In-C-2</a>
+<a href="https://wiki.osdev.org/Bare_Bones">https://wiki.osdev.org/Bare_Bones</a>
+<a href="https://arjunsreedharan.org/post/82710718100/kernels-101-lets-write-a-kernel">https://arjunsreedharan.org/post/82710718100/kernels-101-lets-write-a-kernel</a>
+<a href="https://www.cs.vu.nl/~herbertb/misc/writingkernels.txt">https://www.cs.vu.nl/~herbertb/misc/writingkernels.txt</a>
+<a href="https://www.linuxjournal.com/content/what-does-it-take-make-kernel-0">https://www.linuxjournal.com/content/what-does-it-take-make-kernel-0</a>
+<a href="https://tssurya.wordpress.com/2014/08/28/steps-to-build-your-hello-world-operating-system/">https://tssurya.wordpress.com/2014/08/28/steps-to-build-your-hello-world-operating-syst</a></div></figure><p id="aecf129f-e39a-4291-89e7-414cdd92d5db" class="">
+</p></div></article></body></html>
